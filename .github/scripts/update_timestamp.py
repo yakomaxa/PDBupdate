@@ -1,5 +1,5 @@
 import datetime
-filename = "content/index.md"
+filename = "docs/index.md"
 with open(filename, "r") as file:
     content = file.read()
     
