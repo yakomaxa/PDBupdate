@@ -92,7 +92,7 @@ def generate_html_from_tsv(file_name):
 
     html_content += """
 </div>
-
+<div>© Protein Data Bank Japan (PDBj) licensed under CC-BY-4.0 International</div>
 </body>
 </html>
 """
