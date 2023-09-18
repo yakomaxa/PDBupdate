@@ -1,7 +1,0 @@
----
-title: "Content"
-date: 2023-09-18T18:46:29+09:00
-draft: false
----
-
-{{ .Params.update_time }}
