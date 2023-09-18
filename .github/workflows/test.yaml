@@ -1,0 +1,14 @@
+name: Simple Workflow
+
+on: push
+
+jobs:
+  simple-job:
+      runs-on: ubuntu-latest
+          steps:
+	      - name: Check out code
+	            uses: actions/checkout@v2
+
+    - name: Print Hello World
+          run: echo "Hello, World!"
+	  
