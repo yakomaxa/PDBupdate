@@ -98,7 +98,7 @@ def generate_html_from_tsv(file_name):
 """
 
     # Save the generated HTML to a file
-    with open("docs/index.html", "w") as output_file:
+    with open("docs/index.md", "w") as output_file:
         output_file.write(html_content)
 
 # Call the function with your .tsv file containing the entry names and descriptions
