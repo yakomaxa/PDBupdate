@@ -19,7 +19,7 @@ def get_title(pdbid):
         json_data = response.json()
         title=json_data[name]['struct']['title'][0]
         print(title)
-        return title
+        return pdbid+":"+title
     else:
         print(f"Failed to retrieve the JSON data. HTTP Status Code: {response.status_code}")
         return "error"
