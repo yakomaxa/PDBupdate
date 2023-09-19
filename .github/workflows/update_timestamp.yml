@@ -1,8 +1,6 @@
 name: Update Timestamp
 
-on:
-  schedule:
-    - cron: '30 0 * * 3' # This runs at 00:30 UTC every Wednesday
+on: push
 
 jobs:
   update:
