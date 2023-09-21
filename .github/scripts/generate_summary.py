@@ -40,7 +40,7 @@ def generate_html_from_tsv(file_name):
         lines = [line.strip().split('\t') for line in file]
         entries = [(line[0], line[1], line[2]) for line in lines]
 
-    entires = sorted(entries, key=lambda x: x[2])
+    entries = sorted(entries, key=lambda x: x[2])
     # Start building the HTML content
     html_content = """<!DOCTYPE html>
 <html lang="en">
