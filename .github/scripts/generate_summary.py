@@ -18,8 +18,9 @@ def get_title(pdbid):
     if response.status_code == 200:
         json_data = response.json()
         title=json_data[name]['struct']['title'][0]
+        email = json_data[name]["pdbx_contact_author"]['email'][0]   
         print(title)
-        return pdbid+":"+title
+        return pdbid+":"+title, email
     else:
         print(f"Failed to retrieve the JSON data. HTTP Status Code: {response.status_code}")
         return "error"
@@ -28,18 +29,18 @@ def generate_tsv_from_entries(entry_list, output_file_name):
     """Generate a .tsv file with entries and their respective descriptions."""
     with open(output_file_name, 'w') as file:
         for entry in entry_list:
-            url = f"https://pdbj.org/mine/summary/{entry}"
-            description = get_title(entry)
+            description, email = get_title(entry)
             if description:
-                file.write(f"{entry}\t{description}\n")
+                file.write(f"{entry}\t{description}\t{email}\n")
             else:
                 print(f"Warning: Could not fetch description for {entry}")
 
 def generate_html_from_tsv(file_name):
     with open(file_name, 'r') as file:
         lines = [line.strip().split('\t') for line in file]
-        entries = [(line[0], line[1]) for line in lines]
+        entries = [(line[0], line[1], line[2]) for line in lines]
 
+    entires = sorted(entries, key=lambda x: x[2])
     # Start building the HTML content
     html_content = """<!DOCTYPE html>
 <html lang="en">
@@ -80,7 +81,7 @@ def generate_html_from_tsv(file_name):
 <div class="thumbnail-grid">
 """
 
-    for entry, title in entries:
+    for entry, title, _ in entries:
         thumbnail_url = f"https://pdbj.org/molmil-images/mine/{entry}.png"
         entry_url = f"https://pdbj.org/mine/summary/{entry}"
         html_content += f'''
