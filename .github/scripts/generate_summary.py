@@ -18,7 +18,10 @@ def get_title(pdbid):
     if response.status_code == 200:
         json_data = response.json()
         title=json_data[name]['struct']['title'][0]
-        email = json_data[name]["pdbx_contact_author"]['email'][0]   
+        if "pdbx_contact_author" in json_data[name]:
+            email = json_data[name]["pdbx_contact_author"]['email'][0]
+        else:
+            email = "zzzzzzz"
         print(title)
         return pdbid+":"+title, email
     else:
