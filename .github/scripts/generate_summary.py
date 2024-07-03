@@ -16,7 +16,7 @@ def get_title(pdbid):
     #https://data.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/9bgp-noatom.json
     # probably changed around the head of 2024 July
     #url = "https://data.pdbjbk1.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/"+ pdbid + "-noatom.json"
-    response = requests.get(url)
+    response = requests.get(url,verify=False) # temporary workaround 
     name = "data_" + pdbid.upper()
     if response.status_code == 200:
         json_data = response.json()
