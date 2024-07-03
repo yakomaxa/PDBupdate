@@ -32,11 +32,19 @@ def generate_tsv_from_entries(entry_list, output_file_name):
     """Generate a .tsv file with entries and their respective descriptions."""
     with open(output_file_name, 'w') as file:
         for entry in entry_list:
-            description, email = get_title(entry)
-            if description:
-                file.write(f"{entry}\t{description}\t{email}\n")
+            print(entry)
+            output = get_title(entry)
+            if len(output) == 2:
+                email = output[1]
+                description = output[0]
+                if description and email:
+                    file.write(f"{entry}\t{description}\t{email}\n")
+                else:
+                    print(f"Warning: Could not fetch description for {entry}")
             else:
-                print(f"Warning: Could not fetch description for {entry}")
+                print(f"email or description is missing in  {entry}")
+                
+
 
 def generate_html_from_tsv(file_name):
     with open(file_name, 'r') as file:
