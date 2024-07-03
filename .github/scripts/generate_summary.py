@@ -12,7 +12,10 @@ def get_onlinetxt(url):
         return 0
 
 def get_title(pdbid):
-    url = "https://data.pdbjbk1.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/"+ pdbid + "-noatom.json"
+    url = "https://data.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/" + pdbid + "-noatom.json"
+    #https://data.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/9bgp-noatom.json
+    # probably changed around the head of 2024 July
+    #url = "https://data.pdbjbk1.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/"+ pdbid + "-noatom.json"
     response = requests.get(url)
     name = "data_" + pdbid.upper()
     if response.status_code == 200:
@@ -34,6 +37,7 @@ def generate_tsv_from_entries(entry_list, output_file_name):
         for entry in entry_list:
             print(entry)
             output = get_title(entry)
+            print(output)
             if len(output) == 2:
                 email = output[1]
                 description = output[0]
