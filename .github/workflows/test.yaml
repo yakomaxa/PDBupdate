@@ -7,7 +7,7 @@ on:
         description: 'A dummy input'
         required: false
         default: 'default value'
-    		 
+
 jobs:
   update:
     runs-on: ubuntu-latest
