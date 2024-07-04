@@ -1,7 +1,7 @@
 name: Update Timestamp
 
 on:  
-  workflow_dispatch:
+  workflow_dispatch: {}
     		 
 jobs:
   update:
