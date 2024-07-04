@@ -6,6 +6,11 @@ on:
     - cron: '*/10 * * * *'  # This runs every 10 minutes, maybe
     #- cron: '30 0 * * 3' # This runs at 00:30 UTC every Wednesday
   workflow_dispatch:
+    inputs:
+      dummy:
+        description: 'A dummy input'
+        required: false
+        default: 'default value'
     		
     
 jobs:
