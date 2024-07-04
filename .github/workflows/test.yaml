@@ -1,7 +1,12 @@
 name: Update Timestamp
 
 on:  
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      dummy:
+        description: 'A dummy input'
+        required: false
+        default: 'default value'
     		 
 jobs:
   update:
