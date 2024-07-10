@@ -15,7 +15,7 @@ def get_onlinetxt(url):
 def get_title(pdbid):
     url = "https://data.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/" + pdbid + "-noatom.json"
     cwd = os.getcwd()
-    cert_path = cwd + "../.ssl/" + "pdbj202407.cert"    
+    cert_path = cwd + "/.ssl/" + "pdbj202407.cert"    
     #https://data.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/9bgp-noatom.json
     # probably changed around the head of 2024 July
     #url = "https://data.pdbjbk1.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/"+ pdbid + "-noatom.json"
