@@ -1,6 +1,8 @@
-import os 
+import os
+import time
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 def get_onlinetxt(url):
     response = requests.get(url)
@@ -38,10 +40,14 @@ def get_title(pdbid):
 def generate_tsv_from_entries(entry_list, output_file_name):
     """Generate a .tsv file with entries and their respective descriptions."""
     with open(output_file_name, 'w') as file:
+        count = 0
+        length = len(entry_list)
         for entry in entry_list:
-            print(entry)
+            time.sleep(2) # sleep 2 seconds
+            count += 1            
+            print(entry + "  No. " + str(count) + " out of " + str(length) + " entries.")
             output = get_title(entry)
-            print(output)
+            print(output)            
             if len(output) == 2:
                 email = output[1]
                 description = output[0]
@@ -51,6 +57,7 @@ def generate_tsv_from_entries(entry_list, output_file_name):
                     print(f"Warning: Could not fetch description for {entry}")
             else:
                 print(f"email or description is missing in  {entry}")
+
                 
 
 
@@ -113,9 +120,14 @@ def generate_html_from_tsv(file_name):
     html_content += """
 </div>
 <div style="text-align:center;">© Protein Data Bank Japan (PDBj) licensed under CC-BY-4.0 International</div>
-</body>
-</html>
 """
+
+    
+    # Get the current date and time
+    now = datetime.now()
+    
+    # Print the current date and time
+    html_content += """<div style="text-align:center;">""" + "Updated at " + str(now) + "</div> </body> </html> """
 
     # Save the generated HTML to a file
     with open("docs/index.html", "w") as output_file:
