@@ -1,3 +1,4 @@
+import os 
 import requests
 from bs4 import BeautifulSoup
 
@@ -13,10 +14,13 @@ def get_onlinetxt(url):
 
 def get_title(pdbid):
     url = "https://data.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/" + pdbid + "-noatom.json"
+    cwd = os.getcwd()
+    cert_path = cwd + "../.ssl/" + "pdbj202407.cert"    
     #https://data.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/9bgp-noatom.json
     # probably changed around the head of 2024 July
     #url = "https://data.pdbjbk1.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/"+ pdbid + "-noatom.json"
-    response = requests.get(url,verify=False) # temporary workaround 
+    #response = requests.get(url,verify=False) # temporary workaround
+    response = requests.get(url,verify=cert_path) # temporary workaround 
     name = "data_" + pdbid.upper()
     if response.status_code == 200:
         json_data = response.json()
