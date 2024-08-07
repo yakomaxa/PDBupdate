@@ -68,13 +68,19 @@ def generate_html_from_tsv(file_name):
 
     entries = sorted(entries, key=lambda x: x[2])
     # Start building the HTML content
+    # Get the current date and time
+    now = datetime.now()    
+    # Print the current date and time
     html_content = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDBj Updates</title>
-    <style>
+    <title>PDBj Updates</title>"""
+
+    html_content += """<div style="text-align:center;">""" + "Updated at " + str(now) + "</div> </body></html>"
+
+    html_content +="""<style>
         .thumbnail-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -119,16 +125,9 @@ def generate_html_from_tsv(file_name):
 
     html_content += """
 </div>
-<div style="text-align:center;">© Protein Data Bank Japan (PDBj) licensed under CC-BY-4.0 International</div>
+<div style="text-align:center;">© Protein Data Bank Japan (PDBj) licensed under CC-BY-4.0 International</div></html>
 """
-
     
-    # Get the current date and time
-    now = datetime.now()
-    
-    # Print the current date and time
-    html_content += """<div style="text-align:center;">""" + "Updated at " + str(now) + "</div> </body> </html> """
-
     # Save the generated HTML to a file
     with open("docs/index.html", "w") as output_file:
         output_file.write(html_content)
