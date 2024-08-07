@@ -78,8 +78,6 @@ def generate_html_from_tsv(file_name):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDBj Updates</title>"""
 
-    html_content += """<div style="text-align:center;">""" + "Updated at " + str(now) + "</div> </body></html>"
-
     html_content +="""<style>
         .thumbnail-grid {
             display: grid;
@@ -109,9 +107,9 @@ def generate_html_from_tsv(file_name):
     </style>
 </head>
 <body>
-
-<div class="thumbnail-grid">
 """
+html_content += """<div style="text-align:center;">""" + "Updated at " + str(now) + "</div> </body></html>"
+html_content +="""<div class="thumbnail-grid">"""
 
     for entry, title, _ in entries:
         thumbnail_url = f"https://pdbj.org/molmil-images/mine/{entry}.png"
