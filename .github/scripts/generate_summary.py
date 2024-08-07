@@ -72,8 +72,8 @@ def generate_html_from_tsv(file_name):
     now = datetime.now()    
     # Print the current date and time
     html_content = """<!DOCTYPE html>
-<html lang="en">
-<head>
+    <html lang="en">
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDBj Updates</title>"""
@@ -105,11 +105,11 @@ def generate_html_from_tsv(file_name):
             margin-top: 8px;
         }
     </style>
-</head>
-<body>
-"""
-html_content += """<div style="text-align:center;">""" + "Updated at " + str(now) + "</div> </body></html>"
-html_content +="""<div class="thumbnail-grid">"""
+    </head>
+    <body>
+    """
+    html_content += """<div style="text-align:center;">""" + "Updated at " + str(now) + "</div> </body></html>"
+    html_content +="""<div class="thumbnail-grid">"""
 
     for entry, title, _ in entries:
         thumbnail_url = f"https://pdbj.org/molmil-images/mine/{entry}.png"
