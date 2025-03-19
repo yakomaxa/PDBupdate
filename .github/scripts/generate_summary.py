@@ -3,18 +3,22 @@ import time
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-
 def get_onlinetxt(url):
-    response = requests.get(url)
-    # Check if the request was successful
-    if response.status_code == 200:
-        content = response.text
-        return content
-    else:
-        print(f"Failed to retrieve the file. HTTP Status Code: {response.status_code}")
-        return 0
+    count = 0
+    for _ in range(0,3):
+        try:
+            response = requests.get(url)
+            # Check if the request was successful
+            if response.status_code == 200:
+                content = response.text
+                return content
+        except requests.RequestException as e:
+            print(f"Failed to retrieve the file. HTTP Status Code: {response.status_code}")
+            count += 1
+            if count >= 3:
+                return 0
 
-def get_title(pdbid):
+def download_json(pdbid,dir_path),:
     url = "https://data.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/" + pdbid + "-noatom.json"
     cwd = os.getcwd()
     cert_path = cwd + "/.ssl/" + "pdbj202407.cert"    
@@ -22,21 +26,30 @@ def get_title(pdbid):
     # probably changed around the head of 2024 July
     #url = "https://data.pdbjbk1.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/"+ pdbid + "-noatom.json"
     #response = requests.get(url,verify=False) # temporary workaround
-    response = requests.get(url,verify=cert_path) # temporary workaround 
-    name = "data_" + pdbid.upper()
-    if response.status_code == 200:
-        json_data = response.json()
-        title=json_data[name]['struct']['title'][0]
-        if "pdbx_contact_author" in json_data[name]:
-            email = json_data[name]["pdbx_contact_author"]['email'][0]
-        else:
-            email = "zzzzzzz"
-        print(title)
-        return pdbid+":"+title, email
-    else:
-        print(f"Failed to retrieve the JSON data. HTTP Status Code: {response.status_code}")
-        return "error"
-
+    count = 0
+    failing = True
+    path = ""
+    while failing or count <= 3 :        
+            try:
+                response = requests.get(url,verify=cert_path,timeout=6.5) # temporary workaround
+                failing = False
+                if response.status_code == 200:
+                    json_data = response.json()
+                    name = "data_" + pdbid.upper()
+                    title=json_data[name]['struct']['title'][0]
+                    if "pdbx_contact_author" in json_data[name]:
+                        email = json_data[name]["pdbx_contact_author"]['email'][0]
+                    else:
+                        email = "zzzzzzz"
+                        print(title)
+                    return pdbid+":"+title, email
+                else:
+                    print(f"Failed to retrieve the JSON data. HTTP Status Code: {response.status_code}")
+                    return "error", "error"
+            except requests.RequestException as e:
+                print(f"[ERROR] Failed to download {pdbid}. Error: {e}")
+                count += 1
+    
 def generate_tsv_from_entries(entry_list, output_file_name):
     """Generate a .tsv file with entries and their respective descriptions."""
     with open(output_file_name, 'w') as file:
@@ -47,20 +60,17 @@ def generate_tsv_from_entries(entry_list, output_file_name):
             count += 1            
             print(entry + "  No. " + str(count) + " out of " + str(length) + " entries.")
             output = get_title(entry)
-            print(output)            
-            if len(output) == 2:
+            print(output)
+            if output[0] is None or output[1] is None:
+                print(f"email or description is missing in  {entry}")
+            else:
                 email = output[1]
                 description = output[0]
                 if description and email:
                     file.write(f"{entry}\t{description}\t{email}\n")
                 else:
                     print(f"Warning: Could not fetch description for {entry}")
-            else:
-                print(f"email or description is missing in  {entry}")
-
-                
-
-
+        
 def generate_html_from_tsv(file_name):
     with open(file_name, 'r') as file:
         lines = [line.strip().split('\t') for line in file]
