@@ -18,7 +18,7 @@ def get_onlinetxt(url):
             if count >= 3:
                 return 0
 
-def download_json(pdbid,dir_path),:
+def get_title(pdbid):
     url = "https://data.pdbj.org/pdbjplus/data/pdb/mmjson-noatom/" + pdbid + "-noatom.json"
     cwd = os.getcwd()
     cert_path = cwd + "/.ssl/" + "pdbj202407.cert"    
