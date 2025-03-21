@@ -56,7 +56,7 @@ def generate_tsv_from_entries(entry_list, output_file_name):
         count = 0
         length = len(entry_list)
         for entry in entry_list:
-            time.sleep(2) # sleep 2 seconds
+            time.sleep(0.1) # sleep 2 seconds
             count += 1            
             print(entry + "  No. " + str(count) + " out of " + str(length) + " entries.")
             output = get_title(entry)
