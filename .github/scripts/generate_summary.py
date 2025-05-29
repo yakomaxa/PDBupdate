@@ -190,13 +190,15 @@ def generate_html_from_tsv(file_name):
     for i, (entry, title, _) in enumerate(entries):
         thumbnail_url = f"https://pdbj.org/molmil-images/mine/{entry}.png"
         safe_title = html.escape(title)
+        entry_url = f"https://pdbj.org/mine/summary/{entry}"
         html_content += f'''
-<div onclick="openModal({i})">
-    <img src="{thumbnail_url}" alt="{entry}">
-    <div class="entry-title">{safe_title}</div>
-</div>
-'''
-
+        <div onclick="openModal({i})">
+        <img src="{thumbnail_url}" alt="{entry}">
+        <div class="entry-title">
+        <a href="{entry_url}" target="_blank" onclick="event.stopPropagation()">{safe_title}</a>
+        </div>
+        </div>
+        '''
     html_content += """
 </div>
 
