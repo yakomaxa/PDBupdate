@@ -325,7 +325,13 @@ document.addEventListener("keydown", function(event) {
 </script>
 
 <div style="text-align:center; margin-top:20px;">
-  Data source: Protein Data Bank Japan (PDBj), licensed under CC-BY-4.0 International
+  Image data source: Protein Data Bank Japan (PDBj), licensed under CC-BY-4.0 International
+</div>
+<div style="text-align:center; margin-top:20px;">
+  Image data source: RCSB PDB, CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
+</div>
+<div style="text-align:center; margin-top:20px;">
+  Image data source: Protein Data Bank Europe (PDBe), licensed under CC BY 4.0 International
 </div>
 </body>
 </html>"""
