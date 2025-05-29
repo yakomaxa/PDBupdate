@@ -56,7 +56,8 @@ def generate_tsv_from_entries(entry_list, output_file_name):
         count = 0
         length = len(entry_list)
         for entry in entry_list:
-            time.sleep(0.1) # sleep 2 seconds
+            #if count >= 10: debug
+            # break
             count += 1            
             print(entry + "  No. " + str(count) + " out of " + str(length) + " entries.")
             output = get_title(entry)
@@ -71,6 +72,8 @@ def generate_tsv_from_entries(entry_list, output_file_name):
                 else:
                     print(f"Warning: Could not fetch description for {entry}")
 
+
+
 def generate_html_from_tsv(file_name):
     from datetime import datetime
     import html
@@ -83,7 +86,7 @@ def generate_html_from_tsv(file_name):
     now = datetime.now().strftime('%Y-%m-%d %H:%M')
 
     image_data_js = ',\n'.join([
-        '{{src: "https://pdbj.org/molmil-images/mine/{0}.png", title: "{1}", link: "https://pdbj.org/mine/summary/{0}"}}'.format(
+        '{{id: "{0}", src: "https://pdbj.org/molmil-images/mine/{0}.png", title: "{1}", link: "https://pdbj.org/mine/summary/{0}"}}'.format(
             html.escape(entry), html.escape(title.replace('"', '\\"')))
         for entry, title, _ in entries
     ])
@@ -139,11 +142,15 @@ def generate_html_from_tsv(file_name):
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        overflow-y: auto;
+        padding: 20px;
     }}
 
     #modal img {{
-        max-width: 90%;
-        max-height: 80%;
+        margin: 10px 0;
+        max-width: 95vw;
+        max-height: 80vh;
+        border: 1px solid #888;
     }}
 
     .modal-title {{
@@ -153,24 +160,26 @@ def generate_html_from_tsv(file_name):
     }}
 
     .nav-button {{
-        position: absolute;
-        top: 50%;
-        font-size: 2rem;
-        color: white;
-        background: none;
-        border: none;
-        cursor: pointer;
-        user-select: none;
-    }}
+    position: fixed;               /* fixed to viewport, not modal content */
+    top: 50%;                      /* center vertically */
+    transform: translateY(-50%);   /* adjust for own height */
+    font-size: 2.5rem;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    z-index: 1001;
+    padding: 0 10px;
+}}
 
-    .prev {{
-        left: 20px;
-    }}
+.prev {{
+    left: 20px;
+}}
 
-    .next {{
-        right: 20px;
-    }}
-
+.next {{
+    right: 20px;
+}}
     .close {{
         position: absolute;
         top: 20px;
@@ -179,6 +188,28 @@ def generate_html_from_tsv(file_name):
         color: white;
         cursor: pointer;
     }}
+
+    .rcsb-image {{
+    max-width: 150px;
+    height: auto;
+    border: 1px solid #888;
+    margin: 10px 0;
+    }}
+
+
+    #pdbeViews {{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 10px;
+    }}
+
+    #pdbeViews img {{
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #666;
+    }}
 </style>
 </head>
 <body>
@@ -186,29 +217,47 @@ def generate_html_from_tsv(file_name):
 <div class="thumbnail-grid">
 """
 
-    # Add grid entries
     for i, (entry, title, _) in enumerate(entries):
         thumbnail_url = f"https://pdbj.org/molmil-images/mine/{entry}.png"
         safe_title = html.escape(title)
         entry_url = f"https://pdbj.org/mine/summary/{entry}"
         html_content += f'''
-        <div onclick="openModal({i})">
-        <img src="{thumbnail_url}" alt="{entry}">
-        <div class="entry-title">
-        <a href="{entry_url}" target="_blank" onclick="event.stopPropagation()">{safe_title}</a>
-        </div>
-        </div>
-        '''
+<div onclick="openModal({i})">
+  <img src="{thumbnail_url}" alt="{entry}">
+  <div class="entry-title">
+    <a href="{entry_url}" target="_blank" onclick="event.stopPropagation()">{safe_title}</a>
+  </div>
+</div>
+'''
+
     html_content += """
 </div>
 
-<!-- Modal -->
+<!-- Modal Overlay -->
 <div id="modal">
   <span class="close" onclick="closeModal()">&times;</span>
   <button class="nav-button prev" onclick="prevImage()">&#10094;</button>
+
   <a id="modalLink" href="#" target="_blank">
-    <img id="modalImg" src="" alt="Image">
+    <img id="modalImg" src="" alt="PDBj Image">
   </a>
+
+ <a id="rcsbLink" href="#" target="_blank">
+  <img id="rcsbImg" src="" alt="RCSB Assembly" class="rcsb-image">
+ </a>
+
+  <div id="pdbeViews">
+  <a id="pdbeLinkFront" href="#" target="_blank">
+    <img id="pdbeFront" src="" alt="Front View">
+  </a>
+  <a id="pdbeLinkSide" href="#" target="_blank">
+    <img id="pdbeSide" src="" alt="Side View">
+  </a>
+  <a id="pdbeLinkTop" href="#" target="_blank">
+    <img id="pdbeTop" src="" alt="Top View">
+  </a>
+</div>
+
   <div class="modal-title" id="modalTitle"></div>
   <button class="nav-button next" onclick="nextImage()">&#10095;</button>
 </div>
@@ -228,10 +277,29 @@ function openModal(index) {
 
 function updateModal() {
     const entry = entries[currentIndex];
+    const pdbid = entry.id.toLowerCase();
+    const pdbidUC = entry.id.toUpperCase();
+
     document.getElementById("modalImg").src = entry.src;
     document.getElementById("modalTitle").textContent = entry.title;
     document.getElementById("modalLink").href = entry.link;
+
+    // RCSB image and link
+    const rcsbURL = `https://cdn.rcsb.org/images/structures/${pdbid}_assembly-1.jpeg`;
+    document.getElementById("rcsbImg").src = rcsbURL;
+    document.getElementById("rcsbLink").href = `https://www.rcsb.org/structure/${pdbidUC}`;
+
+    // PDBe views
+    const pdbeURL = `https://www.ebi.ac.uk/pdbe/entry/pdb/${pdbid}`;
+    document.getElementById("pdbeFront").src = `https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_assembly_1_chain_front_image-200x200.png`;
+    document.getElementById("pdbeSide").src = `https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_assembly_1_chain_side_image-200x200.png`;
+    document.getElementById("pdbeTop").src = `https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_assembly_1_chain_top_image-200x200.png`;
+
+    document.getElementById("pdbeLinkFront").href = pdbeURL;
+    document.getElementById("pdbeLinkSide").href = pdbeURL;
+    document.getElementById("pdbeLinkTop").href = pdbeURL;
 }
+
 
 function closeModal() {
     document.getElementById("modal").style.display = "none";
