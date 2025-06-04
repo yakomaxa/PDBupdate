@@ -182,8 +182,8 @@ def generate_html_from_tsv(file_name):
 }}
     .close {{
         position: absolute;
-        top: 20px;
-        right: 30px;
+        top: 8%;                      /* center vertically */
+        right: 8%;
         font-size: 2rem;
         color: white;
         cursor: pointer;
