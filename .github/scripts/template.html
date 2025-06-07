@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PDBj Updates</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+    }
+
+    .thumbnail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 16px;
+      padding: 20px;
+    }
+
+    .thumbnail-grid img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 5px;
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+
+    .thumbnail-grid img:hover {
+      transform: scale(1.1);
+    }
+
+    .entry-title {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .modal-images {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .modal-images img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .rcsb-image {
+      transform: scale(0.512);
+      transform-origin: center;
+      border: 1px solid #888;
+    }
+
+    #modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .modal-title {
+      color: white;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    #modalIndex {
+      color: white;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .nav-button {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.5rem;
+      color: white;
+      background: none;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      z-index: 1001;
+      padding: 0 10px;
+    }
+
+    .prev {
+      left: 20px;
+    }
+
+    .next {
+      right: 20px;
+    }
+
+    .close {
+      position: absolute;
+      top: 8%;
+      right: 8%;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+    }
+
+    #pdbeViews {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    #pdbeViews img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #666;
+    }
+  </style>
+</head>
+<body>
+
+<div style="text-align:center;">Updated at {{TIMESTAMP}}</div>
+
+<div class="thumbnail-grid">
+  {{THUMBNAILS}}
+</div>
+
+{{MODAL_JS}}
+
+<div style="text-align:center; margin-top:20px;">
+  Image data source: Protein Data Bank Japan (PDBj), licensed under CC-BY-4.0 International
+</div>
+<div style="text-align:center; margin-top:20px;">
+  Image data source: RCSB PDB, CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
+</div>
+<div style="text-align:center; margin-top:20px;">
+  Image data source: Protein Data Bank Europe (PDBe), licensed under CC BY 4.0 International
+</div>
+
+</body>
+</html>
+
+
