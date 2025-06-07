@@ -31,7 +31,7 @@ jobs:
         python -m pip install beautifulsoup4
         
     - name: Update timestamp
-      run: python .github/scripts/generate_summary.py
+      run: python .github/scripts/generate_summary.py .github/scripts/template.html .github/scripts/modal_block.js yes
 
     - name: Commit and push changes
       run: |
